@@ -8,7 +8,6 @@ import java.util.List;
 @RestController
 public class ApiController {
     private List<Theme> theme = new ArrayList<>();
-    private List<Comment> comment = new ArrayList<>();
     //выдать список тем
     //curl -X GET  http://localhost:8080/theme
     @GetMapping("theme")
@@ -88,7 +87,7 @@ public class ApiController {
     //  Обновить комментарий в определенной теме
     //curl -X PUT  http://localhost:8080/theme/{index}/comment/{indexComment} 'Content-Type: text/plain'
     @PutMapping("theme/{index}/comment/{indexComment}")
-    public void updateTheme(
+    public void updateComm(
             @PathVariable("index") Integer i,
             @PathVariable("indexComment") Integer n,
             @RequestBody String comment) {
@@ -104,7 +103,63 @@ public class ApiController {
        Theme a = theme.get(index);
        return a.listOfComments();
     }
-
-
-
+    // Выдать список комментариев определённого пользователя
+    //curl -X GET  http://localhost:8080/user"
+    @GetMapping("user")
+    public  List<Comment> getUserComments(@RequestBody String user) {
+        ArrayList<Comment> usersComm = new ArrayList<>();
+        for (int i = 0; i < theme.size(); i++) {
+            Theme a = theme.get(i);
+            List<Comment> commentss = new ArrayList<>();
+            commentss = a.listOfComments();
+            for (int j = 0; j < commentss.size(); j++) {
+                Comment comm = commentss.get(j);
+                String userComm = comm.getUser();
+                if (user == userComm) {
+                    usersComm.add(comm);
+                }
+            }
+        }
+        return usersComm;
+    }
+    // Обновить комментарий определенного пользователя в определенной теме
+    //curl -X PUT  http://localhost:8080/theme/{index}/user/{indexComm}/comment 'Content-Type: text/plain'
+    @PutMapping("theme/{index}/user/{indexComm}/comment")
+    public void updateCommUser(
+            @PathVariable("index") Integer i,
+            @PathVariable("indexComm") Integer n,
+            @RequestBody String user,
+            @RequestBody String comment) {
+        Theme a = theme.get(i);
+        List<Integer> numbersOfComments = new ArrayList<>();
+        List<Comment> commentss = new ArrayList<>();
+        commentss = a.listOfComments();
+        for (int j = 0; j < commentss.size(); j++) {
+            String userComm = commentss.get(j).getUser();
+            if (userComm == user) {
+                numbersOfComments.add(j);
+            }
+        }
+        int k = numbersOfComments.get(n);
+        Comment comm = new Comment(comment);
+        a.deleteComment(k);
+        a.addComment(k,comm);
+    }
+    //удалить все комментарии определённого пользователя
+    // curl -X DELETE  http://localhost:8080/userDel 'Content-Type: text/plain'
+    @DeleteMapping("userDel")
+    public void deleteText(@RequestBody String userDel) {
+        for (int i = 0; i < theme.size(); i++) {
+            Theme a = theme.get(i);
+            List<Comment> commentss = new ArrayList<>();
+            commentss = a.listOfComments();
+            for (int j = 0; j < commentss.size(); j++) {
+                Comment comm = commentss.get(j);
+                String userComm = comm.getUser();
+                if (userDel == userComm) {
+                    a.deleteComment(j);
+                }
+            }
+        }
+    }
 }

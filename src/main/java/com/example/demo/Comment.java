@@ -14,4 +14,8 @@ public class Comment {
     public String getName() {
         return name;
     }
+
+    public String getUser() {
+        return user;
+    }
 }
