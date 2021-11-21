@@ -4,40 +4,39 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Theme {
-    private List<Comment> comment = new ArrayList<>();
-    String name;
-    public Theme () {
-        List<Comment> a = new ArrayList<>();
-        a = this.comment;
-        String name = this.name;
-    }
-    public Theme (ArrayList<Comment> comment, String a) {
-        this.comment = comment;
+    private List<Comment> comments = new ArrayList<>();
+    private String name;
+        public Theme (ArrayList<Comment> comments,String a) {
+        this.comments = comments;
         this.name = a;
     }
     public Theme (String a) {
-        this.comment = new ArrayList<>();
+        this.comments = new ArrayList<>();
         this.name = a;
     }
-    public void addComment (Comment a) {
-        comment.add(a);
+    public void ChangeName (String newName) {
+            this.name = newName;
     }
-    public void addComment (int index, Comment a) {
-        comment.remove(index);
-        comment.add(index, a);
+    public void addComment(Comment a) {
+        comments.add(a);
+    }
+    public void updateComment(int index,Comment a) {
+        comments.remove(index);
+        comments.add(index, a);
     }
     public void deleteComment (Comment a) {
-        comment.remove(a);
+        comments.remove(a);
     }
     public void deleteComment (int index) {
-        comment.remove(index);
+        comments.remove(index);
     }
 
-    public List<Comment> getComment() {
-        return comment;
+    public List<Comment> getComments() {
+        return comments;
     }
 
     public List<Comment> listOfComments () {
-        return this.comment;
+        return this.comments;
     }
+    public String getName() { return name;};
 }
